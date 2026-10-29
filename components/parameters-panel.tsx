@@ -40,7 +40,6 @@ export function ParametersPanel({
   onTargetLanguageChange,
 }: ParametersPanelProps) {
   const [sourceLanguage, setSourceLanguage] = useState("auto")
-  const [voiceMode, setVoiceMode] = useState<"prebuilt" | "personal">("prebuilt")
   const [voice, setVoice] = useState("ava")
   const voiceGender = VOICES.find((v) => v.value === voice)?.gender
 
@@ -81,34 +80,12 @@ export function ParametersPanel({
             options={TARGET_LANGUAGES}
           />
 
-          <fieldset className="flex flex-col gap-3">
-            <legend className="mb-3 text-[15px] text-muted-foreground">Speak out translation</legend>
-            <RadioOption
-              name="voice-mode"
-              checked={voiceMode === "prebuilt"}
-              onChange={() => setVoiceMode("prebuilt")}
-              label="Prebuilt voice"
-            />
-            {voiceMode === "prebuilt" ? (
-              <div className="pl-7">
-                <SelectField
-                  id="prebuilt-voice"
-                  ariaLabel="Prebuilt voice"
-                  value={voice}
-                  onChange={setVoice}
-                  options={VOICES}
-                  variant="outlined"
-                  badge={voiceGender}
-                />
-              </div>
-            ) : null}
-            <RadioOption
-              name="voice-mode"
-              checked={voiceMode === "personal"}
-              onChange={() => setVoiceMode("personal")}
-              label="Personal voice"
-              description={
-                <>
+          <div className="flex flex-col gap-3">
+            <h3 className="text-[15px] text-muted-foreground">Speak out translation</h3>
+            {experience === "live-interpreter" ? (
+              <div className="flex flex-col gap-1 rounded border border-border px-4 py-3">
+                <p className="text-[15px] font-medium leading-5">Personal voice</p>
+                <p className="text-[13px] leading-5 text-muted-foreground">
                   {"AI-generated replication of the speaker’s voice using "}
                   <a
                     href="https://learn.microsoft.com/azure/ai-services/speech-service/"
@@ -121,47 +98,23 @@ export function ParametersPanel({
                     <span className="sr-only">(opens in new tab)</span>
                   </a>
                   .
-                </>
-              }
-            />
-          </fieldset>
+                </p>
+              </div>
+            ) : (
+              <SelectField
+                id="prebuilt-voice"
+                label="Prebuilt voice"
+                value={voice}
+                onChange={setVoice}
+                options={VOICES}
+                variant="outlined"
+                badge={voiceGender}
+              />
+            )}
+          </div>
         </div>
       </CollapsibleSection>
     </aside>
-  )
-}
-
-function RadioOption({
-  name,
-  checked,
-  onChange,
-  label,
-  description,
-}: {
-  name: string
-  checked: boolean
-  onChange: () => void
-  label: string
-  description?: React.ReactNode
-}) {
-  const id = useId()
-  return (
-    <div className="flex gap-3">
-      <input
-        id={id}
-        type="radio"
-        name={name}
-        checked={checked}
-        onChange={onChange}
-        className="mt-0.5 size-4 shrink-0 accent-accent"
-      />
-      <div className="flex flex-col gap-1">
-        <label htmlFor={id} className="text-[15px] leading-5">
-          {label}
-        </label>
-        {description ? <p className="text-[13px] leading-5 text-muted-foreground">{description}</p> : null}
-      </div>
-    </div>
   )
 }
 

@@ -89,6 +89,8 @@ export function useInterpreter(demoId: DemoId, targetLanguage: TargetLanguage) {
   const [schedule, setSchedule] = useState<PhraseSchedule[]>([])
   const [scheduleLanguage, setScheduleLanguage] = useState<TargetLanguage>(targetLanguage)
   const startRef = useRef(0)
+  // Bumped on every start/stop/reset so a pending tick from an earlier run can never update state.
+  const runRef = useRef(0)
 
   const totalDuration = useMemo(() => {
     const last = schedule[schedule.length - 1]
@@ -97,7 +99,9 @@ export function useInterpreter(demoId: DemoId, targetLanguage: TargetLanguage) {
 
   useEffect(() => {
     if (status !== "running") return
+    const run = runRef.current
     const id = window.setInterval(() => {
+      if (run !== runRef.current) return
       const next = performance.now() - startRef.current
       setElapsed(next)
       if (next >= totalDuration) setStatus("complete")
@@ -107,6 +111,7 @@ export function useInterpreter(demoId: DemoId, targetLanguage: TargetLanguage) {
 
   const start = useCallback(
     (overrideDemo?: DemoId) => {
+      runRef.current++
       setSchedule(buildSchedule(overrideDemo ?? demoId, targetLanguage))
       setScheduleLanguage(targetLanguage)
       setElapsed(0)
@@ -117,11 +122,13 @@ export function useInterpreter(demoId: DemoId, targetLanguage: TargetLanguage) {
   )
 
   const stop = useCallback(() => {
+    runRef.current++
     setElapsed(performance.now() - startRef.current)
     setStatus("stopped")
   }, [])
 
   const reset = useCallback(() => {
+    runRef.current++
     setStatus("idle")
     setElapsed(0)
     setSchedule([])

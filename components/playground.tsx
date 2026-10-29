@@ -22,6 +22,7 @@ export function Playground() {
   const [targetLanguage, setTargetLanguage] = useState<TargetLanguage>("es-ES")
   const [demoId, setDemoId] = useState<DemoId>("business")
   const [tab, setTab] = useState<Tab>("translation")
+  const [inDemo, setInDemo] = useState(false)
   const interpreter = useInterpreter(demoId, targetLanguage)
 
   const isLive = experience === "live-interpreter"
@@ -30,14 +31,21 @@ export function Playground() {
   const sessionActive = interpreter.status !== "idle"
 
   const startDemo = (id: DemoId) => {
+    interpreter.reset()
     setDemoId(id)
+    setInDemo(true)
     setTab("translation")
     interpreter.start(id)
   }
 
+  const backToDemos = () => {
+    interpreter.reset()
+    setInDemo(false)
+  }
+
   const handleExperienceChange = (value: Experience) => {
     setExperience(value)
-    interpreter.reset()
+    backToDemos()
   }
 
   return (
@@ -97,6 +105,7 @@ export function Playground() {
                 onStart={() => interpreter.start()}
                 onStop={interpreter.stop}
                 onReset={interpreter.reset}
+                onBack={inDemo ? backToDemos : undefined}
               />
             ) : isLive ? (
               <LiveInterpreterEmptyState onStart={() => interpreter.start()} onSelectDemo={startDemo} />

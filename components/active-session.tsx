@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronRight, Mic, RotateCcw, Square } from "lucide-react"
+import { ArrowLeft, ChevronRight, Mic, RotateCcw, Square } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { InterpreterStatus, SourceSegment, TargetSegment, TranscriptEntry } from "@/lib/use-interpreter"
 import { CaptionStream } from "./caption-stream"
@@ -20,6 +20,7 @@ type ActiveSessionProps = {
   onStart: () => void
   onStop: () => void
   onReset: () => void
+  onBack?: () => void
 }
 
 export function ActiveSession({
@@ -36,13 +37,29 @@ export function ActiveSession({
   onStart,
   onStop,
   onReset,
+  onBack,
 }: ActiveSessionProps) {
   const running = status === "running"
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border px-6">
-        <SessionStatus status={status} />
+        <div className="flex min-w-0 items-center gap-3">
+          {onBack ? (
+            <>
+              <button
+                type="button"
+                onClick={onBack}
+                className="-ml-2.5 inline-flex h-8 items-center gap-1.5 rounded px-2.5 text-[13px] font-medium text-foreground transition-colors hover:bg-field focus-visible:outline-2 focus-visible:outline-accent"
+              >
+                <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden="true" />
+                Back to demos
+              </button>
+              <span className="h-4 w-px bg-border-strong" aria-hidden="true" />
+            </>
+          ) : null}
+          <SessionStatus status={status} />
+        </div>
         <button
           type="button"
           onClick={onReset}
