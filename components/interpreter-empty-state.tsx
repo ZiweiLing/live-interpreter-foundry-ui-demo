@@ -70,11 +70,19 @@ export function LiveInterpreterEmptyState({
   )
 }
 
-export function RealtimeEmptyState() {
+export function RealtimeEmptyState({ onStart }: { onStart: () => void }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
+    <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
       <AudioLines className="size-8" strokeWidth={1.75} aria-hidden="true" />
-      <h2 className="text-2xl font-semibold">Upload or record audio to start translation</h2>
+      <h2 className="text-2xl font-semibold">Record audio to start translation</h2>
+      <button
+        type="button"
+        onClick={onStart}
+        className="mt-2 inline-flex h-10 items-center gap-2 rounded bg-accent px-5 text-[15px] font-semibold text-white transition-colors hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        <Mic className="size-4" aria-hidden="true" />
+        Start recording
+      </button>
     </div>
   )
 }

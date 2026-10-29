@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils"
 import { TARGET_LANGUAGES, type TargetLanguage } from "@/lib/demo-scripts"
 import { CollapsibleSection } from "./collapsible-section"
 import { SelectField } from "./select-field"
-import { UploadFiles } from "./upload-files"
 
 export type Experience = "live-interpreter" | "realtime-translation"
 
@@ -127,10 +126,6 @@ export function ParametersPanel({
             />
           </fieldset>
         </div>
-      </CollapsibleSection>
-
-      <CollapsibleSection title="Upload files">
-        <UploadFiles />
       </CollapsibleSection>
     </aside>
   )

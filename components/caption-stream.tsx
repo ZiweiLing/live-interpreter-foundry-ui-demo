@@ -4,7 +4,6 @@ import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { Pause, Play, Volume2, VolumeX } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { SourceSegment, TargetSegment } from "@/lib/use-interpreter"
-import { Waveform } from "./waveform"
 
 const ConfirmedSource = memo(function ConfirmedSource({ text }: { text: string }) {
   return <p className="text-foreground">{text}</p>
@@ -101,17 +100,7 @@ function SourceSection({
 
   return (
     <section aria-label={`Source captions, ${language}`} className="flex min-h-0 flex-1 flex-col">
-      <SectionHeader label="Source" language={language}>
-        {listening ? (
-          <span
-            role="status"
-            className="inline-flex items-center gap-2 rounded-full bg-accent-soft py-1 pr-3 pl-2.5 text-[12px] font-medium text-accent"
-          >
-            <Waveform active bars={6} className="h-3.5 gap-[2px]" barClassName="w-[2px]" />
-            Listening
-          </span>
-        ) : null}
-      </SectionHeader>
+      <SectionHeader label="Source" language={language} />
       <div ref={scrollRef} aria-live="polite" className={cn(bodyClass, "pl-9")}>
         {segments.length === 0 ? (
           <p className="text-subtle-foreground">Waiting for speech…</p>
