@@ -87,9 +87,9 @@ export function Playground() {
                 <CaptionStream
                   sourceLanguage={sourceShort}
                   targetLanguage={targetShort}
+                  speechLang={interpreter.speechLang}
                   source={interpreter.source}
                   target={interpreter.target}
-                  targetJoiner={interpreter.joiner}
                   listening={interpreter.status === "running"}
                   speakOut={isLive}
                 />
@@ -119,6 +119,7 @@ export function Playground() {
               onStart={() => interpreter.start()}
               onStop={interpreter.stop}
               onSelectDemo={startDemo}
+              onReset={interpreter.reset}
             />
             <p className="text-center text-[13px] text-muted-foreground">AI-generated content may be incorrect</p>
           </div>

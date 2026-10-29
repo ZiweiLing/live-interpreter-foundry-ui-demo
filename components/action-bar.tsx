@@ -13,6 +13,7 @@ type ActionBarProps = {
   onStart: () => void
   onStop: () => void
   onSelectDemo: (id: DemoId) => void
+  onReset: () => void
 }
 
 export function ActionBar({
@@ -24,6 +25,7 @@ export function ActionBar({
   onStart,
   onStop,
   onSelectDemo,
+  onReset,
 }: ActionBarProps) {
   const running = status === "running"
   const finished = status === "stopped" || status === "complete"
@@ -54,8 +56,19 @@ export function ActionBar({
           ) : (
             <Mic className="size-4" strokeWidth={1.75} aria-hidden="true" />
           )}
-          {running ? stopLabel : startLabel}
+          {running ? stopLabel : finished ? "Replay" : startLabel}
         </button>
+
+        {status !== "idle" ? (
+          <button
+            type="button"
+            onClick={onReset}
+            className="inline-flex h-10 items-center gap-2 rounded-full px-4 text-[15px] font-medium text-muted-foreground transition-colors hover:bg-field hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <RotateCcw className="size-4" strokeWidth={1.75} aria-hidden="true" />
+            Reset demo
+          </button>
+        ) : null}
       </div>
 
       {finished && showDemos ? (
